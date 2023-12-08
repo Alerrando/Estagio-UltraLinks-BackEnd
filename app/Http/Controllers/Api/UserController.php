@@ -29,4 +29,10 @@ class UserController extends Controller{
         $user->update($data);
         return new UserResource($user);
     }
+
+    public function delete(string $id){
+        $user = User::findOrFail($id);
+        $user->delete();
+        return response()->json(['message' => 'Usuário excluído com sucesso'], 200);
+    }
 }
