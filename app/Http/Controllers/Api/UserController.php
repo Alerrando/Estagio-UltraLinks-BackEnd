@@ -7,9 +7,8 @@ class UserController extends Controller{
     public function __construct(protected User $repository){
     }
 
-    public function show(string $id)
+    public function index()
     {
-        $user = $this->repository->findOrFail();
-        return response()->json($user);
+        return User::all();
     }
 }
