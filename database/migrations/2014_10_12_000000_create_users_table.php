@@ -39,9 +39,19 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create("deposit", function(Blueprint $table){
+        Schema::create("deposits", function(Blueprint $table){
             $table->id();
-            $table->string("cpf");
+            $table->string("user_cpf");
+            $table->foreign("user_cpf")->references("cpf")->on("users");
+            $table->string("authorization_code");
+            $table->double("value", 8, 2);
+            $table->timestamps();
+        });
+
+        Schema::create("transfers", function(Blueprint $table){
+            $table->id();
+            $table->string("user_cpf");
+            $table->foreign("user_cpf")->references("cpf")->on("users");
             $table->string("authorization_code");
             $table->double("value", 8, 2);
             $table->timestamps();

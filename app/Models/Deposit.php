@@ -10,7 +10,7 @@ class Deposit extends Model
     use HasFactory;
 
     protected $fillable = [
-        'cpf',
+        'user_cpf',
         'authorization_code',
         'value',
     ];
