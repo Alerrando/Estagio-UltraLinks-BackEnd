@@ -15,7 +15,8 @@ class TransferResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'cpf' => $this->cpf,
+            'cpf' => $this->user_cpf,
+            'cpf_transfer' => $this->user_cpf_transfer,
             'authorization_code' => $this->authorization_code,
             'value' => $this->value,
         ];

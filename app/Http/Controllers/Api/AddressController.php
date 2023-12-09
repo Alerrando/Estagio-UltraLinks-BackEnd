@@ -2,10 +2,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Resources\AddressResource;
-use Illuminate\Support\Facades\Http;
 use App\Models\Address;
+use Illuminate\Support\Facades\Http;
 
 class AddressController extends Controller{
     public function create(string $cep, int $user_id){

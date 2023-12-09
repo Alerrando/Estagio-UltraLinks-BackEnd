@@ -11,6 +11,7 @@ class Transfer extends Model
 
     protected $fillable = [
         'user_cpf',
+        'user_cpf_transfer',
         'authorization_code',
         'value',
     ];

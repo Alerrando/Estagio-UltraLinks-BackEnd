@@ -9,7 +9,6 @@ use App\Models\User;
 use App\Http\Validations\Validations;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class DepositController extends Controller{
     public function deposit(Request $request){

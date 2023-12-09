@@ -2,19 +2,15 @@
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use App\Http\Resources\DepositResource;
 use App\Http\Resources\AddressResource;
 use App\Http\Validations\Validations;
 use App\Models\User;
-use App\Models\Deposit;
 use App\Models\Address;
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Services\TokenService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
-use Laravel\Sanctum\HasApiTokens;
 
 class UserController extends Controller{
     public function __construct(protected User $repository){
@@ -83,7 +79,7 @@ class UserController extends Controller{
     public function update(Request $request, string $id){
         $data = $request->all();
         $user = User::findOrFail($id);
-        
+
         if ($request->bearerToken() == null) {
             return response()->json(["status" => false, "message" => "Token não é válido!"], 403);
         }
