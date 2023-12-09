@@ -15,9 +15,27 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->date('date_of_birth');
             $table->string('password');
-            $table->rememberToken();
+            $table->string('cpf')->unique();
+            $table->string('cep');
+            $table->string("address_number");
+            $table->timestamps();
+        });
+
+        Schema::create("addresses", function(Blueprint $table){
+            $table->id();
+            $table->string("cep");
+            $table->string("logradouro")->nullable();
+            $table->string("complemento")->nullable();
+            $table->string("bairro")->nullable();
+            $table->string("localidade");
+            $table->string("uf");
+            $table->string("ibge");
+            $table->string("gia");
+            $table->string("ddd");
+            $table->unsignedBigInteger("user_id");
+            $table->foreign("user_id")->references("id")->on("users")->unique();
             $table->timestamps();
         });
     }

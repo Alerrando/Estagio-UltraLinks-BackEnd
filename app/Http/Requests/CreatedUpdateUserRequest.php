@@ -30,7 +30,7 @@ class CreatedUpdateUserRequest extends FormRequest
             ],
             "password" => [
                 "required"
-            ]
+            ],
         ];
     }
 }

@@ -5,6 +5,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Api\AddressController;
 use App\Models\User;
 
 class UserController extends Controller{
@@ -20,17 +22,29 @@ class UserController extends Controller{
     public function validateUser(Request $request){
         $user = User::where('email', $request->email)->first();
 
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            abort(403, 'Credenciais inválidas');
+        }
+
         return $user;
     }
 
     public function create(Request $request){
         try {
             $data = $request->all();
+            $cep = $request->only("cep");
 
-            if(Auth::attempt(["email" => $data["email"], "password" => $data["password"]])){
+            if(!Auth::attempt(["email" => $data["email"], "password" => $data["password"]])){
                 $data["password"] = bcrypt($request->password);
                 $user = User::create($data);
-                return new UserResource($user);
+                $adressController = new AddressController();
+                $adressController->create($cep['cep'], $user["id"]);
+                return response()->json([
+                    "status" => true,
+                    "message" => [
+                        new UserResource($user),
+                    ]
+                ]);
             };
 
             abort(403, 'Erro ao cadastrar!');
@@ -40,7 +54,6 @@ class UserController extends Controller{
             return false;
         }
     }
-
 
     public function update(Request $request, string $id){
         $data = $request->all();
