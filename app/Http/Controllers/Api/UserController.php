@@ -20,10 +20,9 @@ class UserController extends Controller{
     }
 
     public function getNextUserID(){
+        $statement = DB::select("show table status like 'users'");
 
-    $statement = DB::select("show table status like 'users'");
-
-    return response()->json(['user_id' => $statement[0]->Auto_increment]);
+        return response()->json(['user_id' => $statement[0]->Auto_increment]);
     }
 
     public function validateUser(Request $request){

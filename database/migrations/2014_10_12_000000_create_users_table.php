@@ -44,6 +44,7 @@ return new class extends Migration
             $table->string("cpf");
             $table->string("authorization_code");
             $table->double("value", 8, 2);
+            $table->timestamps();
         });
     }
 
