@@ -38,8 +38,6 @@ class UserController extends Controller{
 
     public function create(Request $request){
         try {
-            $adressController = new AddressController();
-            $cep = $request->only("cep");
             $data = $request->only(['name', 'email', 'date_of_birth', 'password', 'cpf', 'cep', 'address_number']);
             $requiredFields = ['name', 'email', 'date_of_birth', 'password', 'cpf', 'cep', 'address_number'];
             foreach ($requiredFields as $field) {
@@ -48,21 +46,21 @@ class UserController extends Controller{
                 }
             }
 
-            if(!Auth::attempt(["email" => $data["email"], "password" => $data["password"]])){
+            if (!Auth::attempt(["email" => $data["email"], "password" => $data["password"]])) {
                 $user = User::create($data);
-                $adressController->create($cep['cep'], $user["id"]);
+                (new AddressController())->create($request->input('cep'), $user->id);
                 return response()->json([
                     "status" => true,
                     "message" => [
                         new UserResource($user),
                     ]
                 ]);
-            };
+            }
 
             return response()->json([
                 "status" => false,
                 "message" => "Erro ao cadastrar!"
-            ]);
+            ], 403);
         } catch (Throwable $th) {
             report($th);
             return response()->json([
@@ -72,7 +70,6 @@ class UserController extends Controller{
         }
     }
 
-
     public function update(Request $request, string $id){
         $data = $request->only(['name', 'email', 'date_of_birth', 'password', 'cpf', 'cep', 'address_number']);
         $requiredFields = ['name', 'email', 'date_of_birth', 'password', 'cpf', 'cep', 'address_number'];
@@ -81,7 +78,7 @@ class UserController extends Controller{
                 return response()->json(['error' => 'Campo ' . $field . ' ausente'], 400);
             }
         }
-        
+
         $data = $request->all();
         $user = User::findOrFail($id);
         $user->update($data);

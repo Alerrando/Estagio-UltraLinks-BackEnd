@@ -13,6 +13,5 @@ class Deposit extends Model
         'cpf',
         'authorization_code',
         'value',
-
     ];
 }
