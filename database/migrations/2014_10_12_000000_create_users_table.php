@@ -39,7 +39,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create("deposit", function(Bluepirt $table){
+        Schema::create("deposit", function(Blueprint $table){
             $table->id();
             $table->string("cpf");
             $table->string("authorization_code");

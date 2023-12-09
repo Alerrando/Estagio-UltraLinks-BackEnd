@@ -12,7 +12,7 @@ class AddressController extends Controller{
         try {
             $url = 'https://viacep.com.br/ws/'.$cep.'/json/';
             $response = Http::get($url);
-
+            
             if ($response->successful()) {
                 $bodyInfos = $response->json();
                 $bodyInfos["user_id"] = $user_id;

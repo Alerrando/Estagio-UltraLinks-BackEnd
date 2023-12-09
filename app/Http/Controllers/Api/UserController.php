@@ -1,6 +1,5 @@
 <?php
 namespace App\Http\Controllers\Api;
-use App\Http\Requests\CreatedUpdateUserRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
@@ -39,13 +38,18 @@ class UserController extends Controller{
 
     public function create(Request $request){
         try {
-            $data = $request->all();
+            $adressController = new AddressController();
             $cep = $request->only("cep");
+            $data = $request->only(['name', 'email', 'date_of_birth', 'password', 'cpf', 'cep', 'address_number']);
+            $requiredFields = ['name', 'email', 'date_of_birth', 'password', 'cpf', 'cep', 'address_number'];
+            foreach ($requiredFields as $field) {
+                if (!isset($data[$field])) {
+                    return response()->json(['error' => 'Campo ' . $field . ' ausente'], 400);
+                }
+            }
 
             if(!Auth::attempt(["email" => $data["email"], "password" => $data["password"]])){
-                $data["password"] = bcrypt($request->password);
                 $user = User::create($data);
-                $adressController = new AddressController();
                 $adressController->create($cep['cep'], $user["id"]);
                 return response()->json([
                     "status" => true,
@@ -55,15 +59,29 @@ class UserController extends Controller{
                 ]);
             };
 
-            abort(403, 'Erro ao cadastrar!');
+            return response()->json([
+                "status" => false,
+                "message" => "Erro ao cadastrar!"
+            ]);
         } catch (Throwable $th) {
             report($th);
-
-            return false;
+            return response()->json([
+                "status" => false,
+                "message" => "Erro no sistema: ".$th,
+            ]);
         }
     }
 
+
     public function update(Request $request, string $id){
+        $data = $request->only(['name', 'email', 'date_of_birth', 'password', 'cpf', 'cep', 'address_number']);
+        $requiredFields = ['name', 'email', 'date_of_birth', 'password', 'cpf', 'cep', 'address_number'];
+        foreach ($requiredFields as $field) {
+            if (!isset($data[$field])) {
+                return response()->json(['error' => 'Campo ' . $field . ' ausente'], 400);
+            }
+        }
+        
         $data = $request->all();
         $user = User::findOrFail($id);
         $user->update($data);
