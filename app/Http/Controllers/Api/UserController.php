@@ -50,7 +50,7 @@ class UserController extends Controller{
             "message" => [
                 "user" => $user,
                 "address" => new AddressResource($adress),
-                "bearer" => $request->bearerToken(),
+                "token" => $request->bearerToken(),
             ]
         ], 202);
     }
@@ -60,7 +60,7 @@ class UserController extends Controller{
             $data = $request->all();
             $validation = new Validations();
             $returnValidation = $validation->validate(['name', 'email', 'date_of_birth', 'password', 'cpf', 'cep', 'address_number'], $data);
-
+            
             if($returnValidation === true){
                 if (!Auth::attempt(["email" => $data["email"], "password" => $data["password"]])) {
                     $user = User::create($data);
@@ -81,9 +81,8 @@ class UserController extends Controller{
     }
 
     public function update(Request $request, string $id){
-        $data = $request->only(['name', 'email', 'date_of_birth', 'password', 'cpf', 'cep', 'address_number']);
+        $data = $request->all();
         $user = User::findOrFail($id);
-
 
         if ($request->bearerToken() == null) {
             return response()->json(["status" => false, "message" => "Token não é válido!"], 403);

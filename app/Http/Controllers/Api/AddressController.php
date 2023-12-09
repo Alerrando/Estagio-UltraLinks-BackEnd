@@ -10,9 +10,9 @@ use App\Models\Address;
 class AddressController extends Controller{
     public function create(string $cep, int $user_id){
         try {
-            $url = 'https://viacep.com.br/ws/'.$cep.'/json/';
+            $url = 'https://viacep.com.br/ws/'.str_replace("-", "", $cep).'/json/';
             $response = Http::get($url);
-            
+
             if ($response->successful()) {
                 $bodyInfos = $response->json();
                 $bodyInfos["user_id"] = $user_id;
