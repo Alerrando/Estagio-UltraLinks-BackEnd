@@ -15,7 +15,7 @@ class DepositResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'cpf' => $this->cpf,
+            'cpf' => $this->user_cpf,
             'authorization_code' => $this->authorization_code,
             'value' => $this->value,
         ];

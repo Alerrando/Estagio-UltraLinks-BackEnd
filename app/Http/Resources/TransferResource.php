@@ -14,6 +14,10 @@ class TransferResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'cpf' => $this->cpf,
+            'authorization_code' => $this->authorization_code,
+            'value' => $this->value,
+        ];
     }
 }

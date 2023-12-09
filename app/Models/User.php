@@ -23,6 +23,7 @@ class User extends Authenticatable implements JWtSubject{
         'cpf',
         'cep',
         'address_number',
+        'total_value',
     ];
 
     /**

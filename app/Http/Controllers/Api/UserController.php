@@ -59,8 +59,8 @@ class UserController extends Controller{
         try {
             $data = $request->all();
             $validation = new Validations();
-            $returnValidation = $validation->validate(['name', 'email', 'date_of_birth', 'password', 'cpf', 'cep', 'address_number'], $data);
-            
+            $returnValidation = $validation->validate(['name', 'email', 'date_of_birth', 'password', 'cpf', 'cep', 'address_number', 'total_value'], $data);
+
             if($returnValidation === true){
                 if (!Auth::attempt(["email" => $data["email"], "password" => $data["password"]])) {
                     $user = User::create($data);
@@ -83,13 +83,13 @@ class UserController extends Controller{
     public function update(Request $request, string $id){
         $data = $request->all();
         $user = User::findOrFail($id);
-
+        
         if ($request->bearerToken() == null) {
             return response()->json(["status" => false, "message" => "Token não é válido!"], 403);
         }
 
         $validation = new Validations();
-        $returnValidation = $validation->validate(['name', 'email', 'date_of_birth', 'password', 'cpf', 'cep', 'address_number'], $data);
+        $returnValidation = $validation->validate(['name', 'email', 'date_of_birth', 'password', 'cpf', 'cep', 'address_number', 'total_value'], $data);
 
         if ($returnValidation === true) {
             $user->update($data);
@@ -99,9 +99,7 @@ class UserController extends Controller{
         return $returnValidation;
     }
 
-
     public function delete(Request $request, string $id){
-
         if ($request->bearerToken() == null) {
             return response()->json(["status" => false, "message" => "Token não é válido!"], 403);
         }

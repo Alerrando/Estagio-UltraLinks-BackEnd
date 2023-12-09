@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('cpf')->unique();
             $table->string('cep');
             $table->string("address_number");
+            $table->double("total_value", 8, 2);
             $table->timestamps();
         });
 
@@ -43,7 +44,7 @@ return new class extends Migration
             $table->id();
             $table->string("user_cpf");
             $table->foreign("user_cpf")->references("cpf")->on("users");
-            $table->string("authorization_code");
+            $table->string("authorization_code")->unique();
             $table->double("value", 8, 2);
             $table->timestamps();
         });
@@ -52,7 +53,9 @@ return new class extends Migration
             $table->id();
             $table->string("user_cpf");
             $table->foreign("user_cpf")->references("cpf")->on("users");
-            $table->string("authorization_code");
+            $table->string("user_cpf_transfer");
+            $table->foreign("user_cpf_transfer")->references("cpf")->on("users");
+            $table->string("authorization_code")->unique();
             $table->double("value", 8, 2);
             $table->timestamps();
         });
