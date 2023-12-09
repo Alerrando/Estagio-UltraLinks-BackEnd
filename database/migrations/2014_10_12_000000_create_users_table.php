@@ -38,6 +38,13 @@ return new class extends Migration
             $table->foreign("user_id")->references("id")->on("users")->unique();
             $table->timestamps();
         });
+
+        Schema::create("deposit", function(Bluepirt $table){
+            $table->id();
+            $table->string("cpf");
+            $table->string("authorization_code");
+            $table->double("value", 8, 2);
+        });
     }
 
     /**

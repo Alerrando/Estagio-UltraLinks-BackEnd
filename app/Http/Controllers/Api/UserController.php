@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Api\AddressController;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller{
     public function __construct(protected User $repository){
@@ -17,6 +18,13 @@ class UserController extends Controller{
     {
         $users = User::all();
         return UserResource::collection($users);
+    }
+
+    public function getNextUserID(){
+
+    $statement = DB::select("show table status like 'users'");
+
+    return response()->json(['user_id' => $statement[0]->Auto_increment]);
     }
 
     public function validateUser(Request $request){
