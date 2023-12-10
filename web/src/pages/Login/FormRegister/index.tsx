@@ -37,13 +37,6 @@ export function FormRegister({ handleTogglePages }: FormRegisterProps){
 
     const inputs: InputsProps[] = [
         {
-            nameSpan: "Nome",
-            classNameGrid: "items-start",
-            name: "nome",
-            placeholder: "Digite seu nome",
-            type: "text",
-        },
-        {
             nameSpan: "Email",
             classNameGrid: "items-end",
             name: "email",
