@@ -3,10 +3,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\AddressResource;
+use App\Http\Resources\DepositResource;
+use App\Http\Resources\TransferResource;
 use App\Http\Validations\Validations;
 use App\Models\User;
 use App\Models\Address;
 use App\Models\Deposit;
+use App\Models\Transfer;
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Services\TokenService;
 use Illuminate\Http\Request;
@@ -35,12 +38,17 @@ class UserController extends Controller{
     }
 
     public function infosByCpf(Request $request){
-        $data = $request->all();
-        $user = User::where('cpf', $data["cpf"])->first();
-        $adress = Address::where('user_id', $user->id)->first();
-        $deposits = Deposit::where('user_cpf', $user->cpf)->first();
+        $user = User::where('cpf', $request->input('cpf'))->first();
 
-        if($request->bearerToken() == null){
+        if(!$user) {
+            return response()->json(["status" => false, "message" => "Usuário não encontrado"], 404);
+        }
+
+        $address = Address::where('user_id', $user->id)->first();
+        $deposits = Deposit::where('user_cpf', $user->cpf)->get();
+        $transfers = Transfer::where('user_cpf', $user->cpf)->get();
+
+        if(!$request->bearerToken()) {
             return response()->json(["status" => false, "message" => "Token não é válido!"], 403);
         }
 
@@ -48,11 +56,47 @@ class UserController extends Controller{
             "status" => true,
             "message" => [
                 "user" => $user,
-                "address" => new AddressResource($adress),
-                "deposit" => $deposits,
-                "token" => $request->bearerToken(),
+                "address" => new AddressResource($address),
+                "deposits" => DepositResource::collection($deposits),
+                "transfer" => TransferResource::collection($transfers)
             ]
-        ], 202);
+        ], 200);
+    }
+
+    public function userDeposits(Request $request){
+        $user = User::where('cpf', $request->input('cpf'))->first();
+        if(!$user) {
+            return response()->json(["status" => false, "message" => "Usuário não encontrado"], 404);
+        }
+        $deposits = Deposit::where('user_cpf', $user->cpf)->get();
+
+        if(!$request->bearerToken()) {
+            return response()->json(["status" => false, "message" => "Token não é válido!"], 403);
+        }
+
+        return response()->json([ "status" => true, "message" => [
+                "user" => $user,
+                "deposits" => DepositResource::collection($deposits),
+            ]
+        ], 200);
+    }
+
+    public function userTransfers(Request $request){
+        $user = User::where('cpf', $request->input('cpf'))->first();
+        if(!$user) {
+            return response()->json(["status" => false, "message" => "Usuário não encontrado"], 404);
+        }
+        $transfers = Transfer::where('user_cpf', $user->cpf)->get();
+
+        if(!$request->bearerToken()) {
+            return response()->json(["status" => false, "message" => "Token não é válido!"], 403);
+        }
+
+        return response()->json([ "status" => true, "message" => [
+                "user" => $user,
+                "transfers" => TransferResource::collection($transfers),
+            ]
+        ], 200);
     }
 
     public function create(Request $request){

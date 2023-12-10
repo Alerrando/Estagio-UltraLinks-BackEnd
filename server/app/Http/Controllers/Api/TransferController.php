@@ -24,7 +24,7 @@ class TransferController extends Controller{
         if($returnValidation === true){
             $user = User::where('cpf', $userCpf)->first();
             $userTransfer = User::where('cpf', $data["user_cpf_transfer"])->first();
-
+            
             if ($user && $userTransfer) {
                 $user->total_value -= $data["value"];
                 $userTransfer->total_value += $data["value"];
