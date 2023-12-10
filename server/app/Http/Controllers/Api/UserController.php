@@ -22,6 +22,9 @@ class UserController extends Controller{
 
     public function index(Request $request)
     {
+        if(!$request->bearerToken()) {
+            return response()->json(["status" => false, "message" => "Token não é válido!"], 403);
+        }
         $users = User::all();
         return UserResource::collection($users);
     }
@@ -108,7 +111,7 @@ class UserController extends Controller{
             $data = $request->all();
             $validation = new Validations();
             $returnValidation = $validation->validate(['name', 'email', 'date_of_birth', 'password', 'cpf', 'cep', 'address_number', 'total_value'], $data);
-            
+
             if($returnValidation === true){
                 if (!Auth::attempt(["email" => $data["email"], "password" => $data["password"]])) {
                     $user = User::create($data);

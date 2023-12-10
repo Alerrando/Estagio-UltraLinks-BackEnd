@@ -29,6 +29,27 @@ Este projeto foi feito na implementação de uma API RESTful em PHP usando o fra
 
 - Geração de código de autorização no formato TRANSF0000 (últimos 4 dígitos automáticos).
 
+## Retornando da rota Get do Usuários
+GET /users
+```
+    [
+        {
+            "identify": 1,
+            "name": "Alerrando",
+            "email": "alerrando2@gmail.com",
+            "total_value": 175,
+            "created": "2023-12-10 15:58:00"
+        },
+        {
+            "identify": 2,
+            "name": "José",
+            "email": "jose@gmail.com",
+            "total_value": 55,
+            "created": "2023-12-10 15:58:00"
+        }
+    ]
+```
+
 ## Campos no Cadastro de Usuário
 POST /users
 - 'name'
@@ -46,14 +67,14 @@ POST /users
     "status": true,
     "message": [
         {
-            "identify" => 1,
-            "name" => "Alerrando",
-            "email" => "alerrando2@gmail.com",
-            "total_value" => "100",
+            "identify": 1,
+            "name": "Alerrando",
+            "email": "alerrando2@gmail.com",
+            "total_value": "100",
             "created": "2023-12-10"
         },
         {
-            "token" => "",
+            "token": "",
         }
     ]
 }
@@ -118,27 +139,148 @@ POST /users/by-cpf
   "message": {
     "user": {
       "id": 1,
-      "name": "",
-      "email": "",
-      "date_of_birth": "",
-      "cpf": "",
-      "cep": "",
-      "address_number": "",
+      "name": "Alerrando",
+      "email": "alerrando2@gmail.com",
+      "date_of_birth": "2002-10-16 00:00:00",
+      "cpf": "37851858730",
+      "cep": "19600-000",
+      "address_number": "61",
       "total_value": 0,
-      "created_at": "",
-      "updated_at": ""
+      "created_at": "2023-12-10 00:00:00",
+      "updated_at": "2023-12-10 00:00:00"
     },
     "address": {
-      "cep": "",
+      "cep": "19600-000",
       "logradouro": "",
       "complemento": "",
       "bairro": "",
-      "localidade": "",
-      "uf": ""
+      "localidade": "Rancharia",
+      "uf": "SP"
     },
-    "deposits": [],
-    "transfer": []
+    "deposits": [
+        {
+            "cpf": "37851858730",
+            "authorization_code": "DEP0001",
+            "value": 25
+        }
+    ],
+    "transfer": [
+        {
+            "cpf": "37851858730",
+            "cpf_transfer": "37851858731",
+            "authorization_code": "TRANSF0001",
+            "value": 25
+        }
+    ]
   }
+}
+```
+
+
+## Campos da rota Get de Depósitos por Usuário
+POST /users/deposits
+- "cpf"
+
+### Retorno:
+```
+{
+    "status": true,
+    "message": {
+        "user": {
+            "id": 1,
+            "name": "Alerrando",
+            "email": "alerrando2@gmail.com",
+            "date_of_birth": "2002-10-16 00:00:00",
+            "cpf": "37851858730",
+            "cep": "19600-000",
+            "address_number": "61",
+            "total_value": 0,
+            "created_at": "2023-12-10 00:00:00",
+            "updated_at": "2023-12-10 00:00:00"
+        },
+        "deposits": [
+            {
+            "cpf": "37851858730",
+            "authorization_code": "DEP0001",
+            "value": 25
+            }
+        ]
+    }
+}
+```
+
+## Campos da rota Get de Transferências por Usuário
+POST /users/transfers
+- "cpf"
+
+### Retorno:
+```
+{
+    "status": true,
+    "message": {
+        "user": {
+            "id": 1,
+            "name": "Alerrando",
+            "email": "alerrando2@gmail.com",
+            "date_of_birth": "2002-10-16 00:00:00",
+            "cpf": "37851858730",
+            "cep": "19600-000",
+            "address_number": "61",
+            "total_value": 0,
+            "created_at": "2023-12-10 00:00:00",
+            "updated_at": "2023-12-10 00:00:00"
+        },
+        "transfers": [
+            {
+                "cpf": "37851858730",
+                "cpf_transfer": "37851858731",
+                "authorization_code": "TRANSF0001",
+                "value": 25
+            }
+        ]
+    }
+}
+```
+
+## Atualização de Usuário
+PUT /users/{id}
+- "id" (parâmetro na URL)
+- "name"
+- "email"
+- "date_of_birth"
+- "password"
+- "cpf"
+- "cep"
+- "address_number"
+- "total_value"
+
+### Retorno:
+```
+{
+    "status": true,
+    "message": {
+        "id": 1,
+        "name": "Alerrando",
+        "email": "alerrando2@gmail.com",
+        "date_of_birth": "2002-10-16 00:00:00",
+        "cpf": "37851858730",
+        "cep": "19600-000",
+        "address_number": "61",
+        "total_value": 0,
+        "created_at": "2023-12-10 00:00:00",
+        "updated_at": "2023-12-10 00:00:00"
+    }
+}
+```
+
+## Exclusão de Usuário
+DELETE /users/{id}
+- "id" (parâmetro na URL)
+
+### Retorno: 
+```
+{
+    "message": "Usuário excluído com sucesso"
 }
 ```
 
@@ -153,9 +295,9 @@ POST /users/deposit
   "status": true,
   "message": [
     {
-      "cpf": "",
+      "cpf": "37851858730",
       "authorization_code": "DEP0001",
-      "value": 0
+      "value": 33
     }
   ]
 }
