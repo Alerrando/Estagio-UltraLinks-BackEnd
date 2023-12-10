@@ -6,6 +6,7 @@ use App\Http\Resources\AddressResource;
 use App\Http\Validations\Validations;
 use App\Models\User;
 use App\Models\Address;
+use App\Models\Deposit;
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Services\TokenService;
 use Illuminate\Http\Request;
@@ -37,6 +38,8 @@ class UserController extends Controller{
         $data = $request->all();
         $user = User::where('cpf', $data["cpf"])->first();
         $adress = Address::where('user_id', $user->id)->first();
+        $deposits = Deposit::where('user_cpf', $user->cpf)->first();
+
         if($request->bearerToken() == null){
             return response()->json(["status" => false, "message" => "Token não é válido!"], 403);
         }
@@ -46,6 +49,7 @@ class UserController extends Controller{
             "message" => [
                 "user" => $user,
                 "address" => new AddressResource($adress),
+                "deposit" => $deposits,
                 "token" => $request->bearerToken(),
             ]
         ], 202);
