@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .main-home{
-    background: radial-gradient(circle at center bottom, #00938c 0%, #003139 50%, rgba(0, 37, 43, 1) 100%);
+    background: radial-gradient(circle at center bottom, #fff 0%, #f5f5f5 50%, #c8c8c8 100%);
 }
