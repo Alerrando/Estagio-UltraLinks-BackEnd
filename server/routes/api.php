@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\TransferController;
 
 Route::get("/users", [UserController::class, "index"]);
 Route::post("/users", [UserController::class, "create"]);
-Route::post("/users/find", [UserController::class, "validateUser"]);
+Route::post("/users/login", [UserController::class, "login"]);
 Route::post("/users/by-cpf", [UserController::class, "infosByCpf"]);
 Route::post("/users/deposits", [UserController::class, "userDeposits"]);
 Route::post("/users/transfers", [UserController::class, "userTransfers"]);

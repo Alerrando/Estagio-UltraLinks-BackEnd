@@ -26,7 +26,7 @@ class UserController extends Controller{
         return UserResource::collection($users);
     }
 
-    public function validateUser(Request $request){
+    public function login(Request $request){
         $credentials = $request->only('email', 'password');
         $user = User::where('email', $request->email)->first();
 
@@ -34,7 +34,11 @@ class UserController extends Controller{
             abort(403, 'Credenciais inválidas');
         }
 
-        return response(['user' => $user, "respond_with_token" => (new TokenService())->respondWithToken($credentials)], 200);
+        return response([ "status" => true, 'message' => [
+                "user" => $user,
+                "token" => (new TokenService())->respondWithToken($credentials)
+            ]
+        ], 200);
     }
 
     public function infosByCpf(Request $request){
@@ -104,7 +108,7 @@ class UserController extends Controller{
             $data = $request->all();
             $validation = new Validations();
             $returnValidation = $validation->validate(['name', 'email', 'date_of_birth', 'password', 'cpf', 'cep', 'address_number', 'total_value'], $data);
-
+            
             if($returnValidation === true){
                 if (!Auth::attempt(["email" => $data["email"], "password" => $data["password"]])) {
                     $user = User::create($data);

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TransferResource;
 use App\Http\Validations\Validations;
-use Illuminate\Support\Facades\DB;
 use App\Models\Transfer;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -20,19 +19,25 @@ class TransferController extends Controller{
         if($request->bearerToken() == null){
             return response()->json(["status" => false, "message" => "Token não é válido!"], 403);
         }
-
         if($returnValidation === true){
             $user = User::where('cpf', $userCpf)->first();
             $userTransfer = User::where('cpf', $data["user_cpf_transfer"])->first();
-            
+
             if ($user && $userTransfer) {
-                $user->total_value -= $data["value"];
-                $userTransfer->total_value += $data["value"];
+                $user_value_result = $user->total_value - $data["value"];
+                $user->total_value = $user_value_result;
+
+                $user_transfer_value_result = $userTransfer->total_value + $data["value"];
+                $userTransfer->total_value = $user_transfer_value_result;
 
                 $user->save();
                 $userTransfer->save();
 
-                $authorizationCode = 'TRANSF' . str_pad($this->getNextUserID(), 4, '0', STR_PAD_LEFT);
+                $lastAuthorizationCode = Transfer::orderBy('id', 'desc')->value('authorization_code');
+                $lastNumber = intval(substr($lastAuthorizationCode, 3));
+                $nextNumber = $lastNumber + 1;
+
+                $authorizationCode = 'TRANSF' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
                 $data["authorization_code"] = $authorizationCode;
                 $transfer = Transfer::create($data);
 
@@ -41,12 +46,5 @@ class TransferController extends Controller{
         }
 
         return $returnValidation;
-    }
-
-
-    public function getNextUserID(){
-        $statement = DB::select("show table status like 'transfers'");
-
-        return $statement[0]->Auto_increment;
     }
 }
