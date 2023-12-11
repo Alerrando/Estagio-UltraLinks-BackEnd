@@ -323,3 +323,13 @@ POST /users/transfer
   ]
 }
 ```
+
+## Front-end
+
+### Funcionalidades Implementadas:
+- [X] Página de Cadastro de Usuário
+- [X] Página de Login
+- [X] Página de Depósito de Dinheiro
+- [ ] Página de Transferência de Dinheiro
+- [X] Página de Listagem de Depósitos por Usuário
+- [X] Página de Listagem de Transferências por Usuário
