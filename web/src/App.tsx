@@ -1,12 +1,18 @@
+import { useContext } from "react";
 import { Header } from "./components/Header";
+import { StoreContext } from "./context";
 
 export function App() {
+  const useStore = useContext(StoreContext);
+  const { user } = useStore();
   const peoples = [
     "/public/people(1).jpg", 
     "/public/people(2).jpg",
     "/public/people(3).jpg",
     "/public/people(4).jpg"
   ];
+
+  console.log(user);
 
   return (
     <>

@@ -1,0 +1,23 @@
+.group-buttons-box button.Depositos-Feitos:first-child{
+    background-color: #3ab1b9;
+    color: white;
+}
+
+.group-buttons-box button.Transferencias-Feitas:last-child{
+    background-color: #3ab1b9;
+    color: white;
+}
+
+.group-buttons-box button{
+    border: 1px solid #D8DEE4;
+    padding: 8px 16px;
+    transition: .5s;
+}
+
+.group-buttons-box button:first-child{
+    border-radius: 8px 0 0 8px;
+}
+
+.group-buttons-box button:last-child{
+    border-radius: 0 8px 8px 0;
+}
