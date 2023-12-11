@@ -117,8 +117,11 @@ class UserController extends Controller{
                     $user = User::create($data);
                     $token = (new TokenService())->respondWithToken($data);
                     (new AddressController())->create($request->input('cep'), $user->id);
-
-                    return response()->json(["status" => true, "message" => [ new UserResource($user), $token]]);
+                    
+                    return response()->json(["status" => true, "message" => [
+                        "user" => new UserResource($user),
+                        "token" => $token
+                    ]]);
                 }
 
                 return response()->json(["status" => false, "message" => "Erro ao cadastrar!"], 403);

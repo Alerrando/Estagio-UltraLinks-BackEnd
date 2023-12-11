@@ -18,6 +18,7 @@ class DepositResource extends JsonResource
             'cpf' => $this->user_cpf,
             'authorization_code' => $this->authorization_code,
             'value' => $this->value,
+            "created" => Carbon::make($this->created_at)->format('Y-m-d'),
         ];
     }
 }

@@ -19,6 +19,7 @@ class TransferResource extends JsonResource
             'cpf_transfer' => $this->user_cpf_transfer,
             'authorization_code' => $this->authorization_code,
             'value' => $this->value,
+            "created" => Carbon::make($this->created_at)->format('Y-m-d'),
         ];
     }
 }
